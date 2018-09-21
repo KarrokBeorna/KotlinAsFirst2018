@@ -70,8 +70,8 @@ fun seconds(hours: Int, minutes: Int, seconds: Int): Int {
  * 1 сажень = 3 аршина = 48 вершков, 1 вершок = 4.445 см.
  */
 fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double {
-    val krya = ((sagenes*3+arshins)*16+vershoks)*0.04445
-    return krya
+    val length = ((sagenes*3+arshins)*16+vershoks)*0.04445
+    return length
 }
 
 /**
@@ -81,8 +81,8 @@ fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double {
  * Вывести значение того же угла в радианах (например, 0.63256).
  */
 fun angleInRadian(grad: Int, min: Int, sec: Int): Double {
-    val krya = ((grad*60+min)*60+sec)*0.00000484813681109536
-    return krya
+    val radian = ((grad*60+min)*60+sec)*0.00000484813681109536
+    return radian
 }
 
 /**
@@ -94,8 +94,8 @@ fun angleInRadian(grad: Int, min: Int, sec: Int): Double {
 fun trackLength(x1: Double, y1: Double, x2: Double, y2: Double): Double {
     val x = x2-x1
     val y = y2-y1
-    val krya = sqrt(x*x + y*y)
-    return krya
+    val length = sqrt(x*x + y*y)
+    return length
 }
 
 /**
@@ -105,8 +105,8 @@ fun trackLength(x1: Double, y1: Double, x2: Double, y2: Double): Double {
  * Определить третью цифру справа в этом числе (в данном случае 8).
  */
 fun thirdDigit(number: Int): Int {
-    val tri = (number/100)%10
-    return tri
+    val third = (number/100)%10
+    return third
 }
 
 /**
@@ -117,8 +117,8 @@ fun thirdDigit(number: Int): Int {
  * Определите время поезда в пути в минутах (в данном случае 216).
  */
 fun travelMinutes(hoursDepart: Int, minutesDepart: Int, hoursArrive: Int, minutesArrive: Int): Int {
-    val krya = (hoursArrive-hoursDepart)*60+(minutesArrive-minutesDepart)
-    return krya
+    val minutes = (hoursArrive-hoursDepart)*60+(minutesArrive-minutesDepart)
+    return minutes
 }
 
 /**
@@ -130,8 +130,8 @@ fun travelMinutes(hoursDepart: Int, minutesDepart: Int, hoursArrive: Int, minute
  */
 fun accountInThreeYears(initial: Int, percent: Int): Double {
     val t = percent / 100.0 + 1
-    val three = initial * t * t * t
-    return three
+    val thirdyear = initial * t * t * t
+    return thirdyear
 }
 
 /**
@@ -144,7 +144,7 @@ fun numberRevert(number: Int): Int {
     val one = number%10
     val two = (number%100)/10
     val three = number/100
-    val rez = one*100+two*10+three
-    return rez
+    val revert = one*100+two*10+three
+    return revert
 
 }
