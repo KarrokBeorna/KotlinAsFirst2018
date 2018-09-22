@@ -59,8 +59,8 @@ fun main(args: Array<String>) {
  * Рассчитать время в секундах, прошедшее с начала суток (30035 в данном случае).
  */
 fun seconds(hours: Int, minutes: Int, seconds: Int): Int {
-    val krya = ((hours * 60) + minutes) * 60 + seconds
-    return krya
+    val time = ((hours * 60) + minutes) * 60 + seconds
+    return time
 }
 /**
  * Тривиальная
