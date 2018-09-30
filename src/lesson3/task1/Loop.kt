@@ -76,7 +76,7 @@ fun digitNumber(n: Int): Int {
     do {
         count++
         number /= 10
-    } while (number > 0)
+    } while (abs(number) > 0)
     return count
 }
 
@@ -100,8 +100,14 @@ fun fib(n: Int): Int {
  */
 fun lcm(m: Int, n: Int): Int {
     var k = 1
-    while (k % n > 0 || k % m > 0) k++
-    return k
+    return when {
+        m % n == 0 -> m
+        n % m == 0 -> n
+        else -> {
+            while (k % n > 0 || k % m > 0) k++
+            k
+        }
+    }
 }
 
 /**
@@ -290,12 +296,12 @@ fun cos(x: Double, eps: Double): Double {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun revert(n: Int): Int {
-    var count = 2
+    var count = 1
     var revert = 0
     var numeral = n
     if (numeral < 10) return n
     else {
-        while (numeral / 10 > 10) {
+        while (numeral >= 10) {
             count++
             numeral /= 10
         }
@@ -320,13 +326,13 @@ fun revert(n: Int): Int {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun isPalindrome(n: Int): Boolean {
-    var count = 2
+    var count = 1
     var numeral = n
     var number = 0
     var unit = n
     if (n < 10) return true
     else {
-        while (numeral / 10 > 10) {
+        while (numeral >= 10) {
             count++
             numeral /= 10
         }
