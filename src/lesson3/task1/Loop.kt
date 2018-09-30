@@ -214,12 +214,13 @@ fun sin(x: Double, eps: Double): Double {
         } while (z > eps)
     } else {
         do {
+            var z = 0.0
             for (i in 1..Int.MAX_VALUE step 4) {
-                z = (pow(x, i.toDouble()) / factorial).toInt()
+                z = (pow(x, i.toDouble()) / factorial)
                 if (z < eps) break
                 unit += z
                 factorial *= (i + 1) * (i + 2)
-                z = (pow(x, (i + 2).toDouble()) / factorial).toInt()
+                z = (pow(x, (i + 2).toDouble()) / factorial)
                 if (z < eps) break
                 unit -= z
                 factorial *= (i + 3) * (i + 4)
@@ -271,15 +272,16 @@ fun cos(x: Double, eps: Double): Double {
             } while (z > eps)
             return unit - 2.0
         } else {
+            var z = 0.0
             do {
                 for (i in 0..Int.MAX_VALUE step 4) {
-                    z = (pow(x, i.toDouble()) / factorial).toInt()
-                    if (z < eps) break
+                    z = (pow(x, i.toDouble()) / factorial)
                     unit += z
-                    factorial *= (i + 1) * (i + 2)
-                    z = (pow(x, (i + 2).toDouble()) / factorial).toInt()
                     if (z < eps) break
+                    factorial *= (i + 1) * (i + 2)
+                    z = (pow(x, (i + 2).toDouble()) / factorial)
                     unit -= z
+                    if (z < eps) break
                     factorial *= (i + 3) * (i + 4)
                 }
             } while (z > eps)
