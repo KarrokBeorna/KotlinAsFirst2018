@@ -1,6 +1,10 @@
 @file:Suppress("UNUSED_PARAMETER")
+
 package lesson3.task1
 
+import java.lang.Math.pow
+import kotlin.math.PI
+import kotlin.math.abs
 import kotlin.math.sqrt
 
 /**
@@ -38,7 +42,7 @@ fun isPrime(n: Int): Boolean {
  */
 fun isPerfect(n: Int): Boolean {
     var sum = 1
-    for (m in 2..n/2) {
+    for (m in 2..n / 2) {
         if (n % m > 0) continue
         sum += m
         if (sum > n) break
@@ -66,7 +70,16 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun digitNumber(n: Int): Int = TODO()
+fun digitNumber(n: Int): Int {
+    var count = 0
+    var number = n
+    do {
+        count++
+        number /= 10
+    } while (number > 0)
+    return count
+}
+
 
 /**
  * Простая
@@ -74,7 +87,10 @@ fun digitNumber(n: Int): Int = TODO()
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Int = TODO()
+fun fib(n: Int): Int {
+    return if ((n == 1) || (n == 2)) 1 else
+        fib(n - 2) + fib(n - 1)
+}
 
 /**
  * Простая
@@ -82,21 +98,33 @@ fun fib(n: Int): Int = TODO()
  * Для заданных чисел m и n найти наименьшее общее кратное, то есть,
  * минимальное число k, которое делится и на m и на n без остатка
  */
-fun lcm(m: Int, n: Int): Int = TODO()
+fun lcm(m: Int, n: Int): Int {
+    var k = 1
+    while (k % n > 0 || k % m > 0) k++
+    return k
+}
 
 /**
  * Простая
  *
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
-fun minDivisor(n: Int): Int = TODO()
+fun minDivisor(n: Int): Int {
+    var k = 2
+    while (n % k > 0) k++
+    return k
+}
 
 /**
  * Простая
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int = TODO()
+fun maxDivisor(n: Int): Int {
+    var k = n - 1
+    while (n % k > 0) k--
+    return k
+}
 
 /**
  * Простая
@@ -105,7 +133,11 @@ fun maxDivisor(n: Int): Int = TODO()
  * Взаимно простые числа не имеют общих делителей, кроме 1.
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
-fun isCoPrime(m: Int, n: Int): Boolean = TODO()
+fun isCoPrime(m: Int, n: Int): Boolean {
+    var k = m
+    while (n % k > 0 || m % k > 0) k--
+    return !(k <= n && k <= m && k != 1)
+}
 
 /**
  * Простая
@@ -114,7 +146,11 @@ fun isCoPrime(m: Int, n: Int): Boolean = TODO()
  * то есть, существует ли такое целое k, что m <= k*k <= n.
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
-fun squareBetweenExists(m: Int, n: Int): Boolean = TODO()
+fun squareBetweenExists(m: Int, n: Int): Boolean {
+    var k = 0
+    while ((k * k) < m && k < 46339) k++ //46339 = sqrt(MAX_VALUE) - 1
+    return (k * k) in m..n
+}
 
 /**
  * Средняя
@@ -132,7 +168,18 @@ fun squareBetweenExists(m: Int, n: Int): Boolean = TODO()
  * Написать функцию, которая находит, сколько шагов требуется для
  * этого для какого-либо начального X > 0.
  */
-fun collatzSteps(x: Int): Int = TODO()
+fun collatzSteps(x: Int): Int {
+    var count = 0
+    var n = x
+    while (n > 1) {
+        if (n % 2 == 0)
+            n /= 2
+        else
+            n = n * 3 + 1
+        count++
+    }
+    return count
+}
 
 /**
  * Средняя
@@ -141,7 +188,40 @@ fun collatzSteps(x: Int): Int = TODO()
  * sin(x) = x - x^3 / 3! + x^5 / 5! - x^7 / 7! + ...
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
-fun sin(x: Double, eps: Double): Double = TODO()
+fun sin(x: Double, eps: Double): Double {
+    var unit = 0.0
+    var factorial = 1.0
+    var z = 0
+    val numeral = 0.0
+    if (x / PI % 2.0 == 0.0) {
+        do {
+            for (i in 1..Int.MAX_VALUE step 4) {
+                z = (pow(numeral, i.toDouble()) / factorial).toInt()
+                if (z < eps) break
+                unit += z
+                factorial *= (i + 1) * (i + 2)
+                z = (pow(numeral, (i + 2).toDouble()) / factorial).toInt()
+                if (z < eps) break
+                unit -= z
+                factorial *= (i + 3) * (i + 4)
+            }
+        } while (z > eps)
+    } else {
+        do {
+            for (i in 1..Int.MAX_VALUE step 4) {
+                z = (pow(x, i.toDouble()) / factorial).toInt()
+                if (z < eps) break
+                unit += z
+                factorial *= (i + 1) * (i + 2)
+                z = (pow(x, (i + 2).toDouble()) / factorial).toInt()
+                if (z < eps) break
+                unit -= z
+                factorial *= (i + 3) * (i + 4)
+            }
+        } while (z > eps)
+    }
+    return unit
+}
 
 /**
  * Средняя
@@ -150,7 +230,57 @@ fun sin(x: Double, eps: Double): Double = TODO()
  * cos(x) = 1 - x^2 / 2! + x^4 / 4! - x^6 / 6! + ...
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
-fun cos(x: Double, eps: Double): Double = TODO()
+fun cos(x: Double, eps: Double): Double {
+    var unit = 0.0
+    var factorial = 1.0
+    var z = 0
+    val numeral = 0.0
+    if (x / PI % 2.0 == 0.0) {
+        do {
+            for (i in 0..Int.MAX_VALUE step 4) {
+                z = (pow(numeral, i.toDouble()) / factorial).toInt()
+                if (z < eps) break
+                unit += z
+                factorial *= (i + 1) * (i + 2)
+                z = (pow(numeral, (i + 2).toDouble()) / factorial).toInt()
+                if (z < eps) break
+                unit -= z
+                factorial *= (i + 3) * (i + 4)
+            }
+        } while (z > eps)
+        return unit
+    } else {
+        if (x / PI % 1.0 == 0.0) {
+            do {
+                for (i in 0..Int.MAX_VALUE step 4) {
+                    z = (pow(numeral, i.toDouble()) / factorial).toInt()
+                    if (z < eps) break
+                    unit += z
+                    factorial *= (i + 1) * (i + 2)
+                    z = (pow(numeral, (i + 2).toDouble()) / factorial).toInt()
+                    if (z < eps) break
+                    unit -= z
+                    factorial *= (i + 3) * (i + 4)
+                }
+            } while (z > eps)
+            return unit - 2.0
+        } else {
+            do {
+                for (i in 0..Int.MAX_VALUE step 4) {
+                    z = (pow(x, i.toDouble()) / factorial).toInt()
+                    if (z < eps) break
+                    unit += z
+                    factorial *= (i + 1) * (i + 2)
+                    z = (pow(x, (i + 2).toDouble()) / factorial).toInt()
+                    if (z < eps) break
+                    unit -= z
+                    factorial *= (i + 3) * (i + 4)
+                }
+            } while (z > eps)
+            return unit
+        }
+    }
+}
 
 /**
  * Средняя
@@ -159,7 +289,26 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun revert(n: Int): Int = TODO()
+fun revert(n: Int): Int {
+    var count = 2
+    var revert = 0
+    var numeral = n
+    if (numeral < 10) return n
+    else {
+        while (numeral / 10 > 10) {
+            count++
+            numeral /= 10
+        }
+        var numeral = n
+        for (i in 1..count) {
+            numeral = (n / pow(10.0, (i - 1).toDouble())).toInt()
+            val k = count - i
+            numeral = (numeral % 10 * pow(10.0, k.toDouble())).toInt()
+            revert += numeral
+        }
+    }
+    return revert
+}
 
 /**
  * Средняя
@@ -170,7 +319,30 @@ fun revert(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean = TODO()
+fun isPalindrome(n: Int): Boolean {
+    var count = 2
+    var numeral = n
+    var number = 0
+    var unit = n
+    if (n < 10) return true
+    else {
+        while (numeral / 10 > 10) {
+            count++
+            numeral /= 10
+        }
+        var numeral = n
+        for (i in 1..(count / 2)) {
+            val k = count - i
+            numeral = (n / pow(10.0, (i - 1).toDouble())).toInt()
+            number = (unit / pow(10.0, k.toDouble())).toInt()
+            unit = ((n % pow(10.0, (k).toDouble())).toInt())
+            numeral = (numeral % 10)
+            if (numeral == number) continue
+            else break
+        }
+        return numeral == number
+    }
+}
 
 /**
  * Средняя
