@@ -88,8 +88,17 @@ fun digitNumber(n: Int): Int {
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
 fun fib(n: Int): Int {
-    return if ((n == 1) || (n == 2)) 1 else
-        fib(n - 2) + fib(n - 1)
+    var a = 1
+    var b = 1
+    var sum = 0
+    return if (n <= 2) 1 else {
+        for (i in 1..(n - 2)) {
+            sum = a + b
+            a = b
+            b = sum
+        }
+        sum
+    }
 }
 
 /**
@@ -99,15 +108,13 @@ fun fib(n: Int): Int {
  * минимальное число k, которое делится и на m и на n без остатка
  */
 fun lcm(m: Int, n: Int): Int {
-    var k = 1
-    return when {
-        m % n == 0 -> m
-        n % m == 0 -> n
-        else -> {
-            while (k % n > 0 || k % m > 0) k++
-            k
-        }
+    var k = if (n > m) n
+    else m
+    while (k % n > 0 || k % m > 0) {
+        k += if (n > m) n
+        else m
     }
+    return k
 }
 
 /**
@@ -126,11 +133,8 @@ fun minDivisor(n: Int): Int {
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int {
-    var k = n - 1
-    while (n % k > 0) k--
-    return k
-}
+fun maxDivisor(n: Int): Int = n / minDivisor(n)
+
 
 /**
  * Простая
@@ -154,7 +158,7 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  */
 fun squareBetweenExists(m: Int, n: Int): Boolean {
     var k = 0
-    while ((k * k) < m && k < 46339) k++ //46339 = sqrt(MAX_VALUE) - 1
+    while ((k * k) < m && k < sqrt(Int.MAX_VALUE.toDouble())) k++
     return (k * k) in m..n
 }
 
@@ -197,32 +201,18 @@ fun collatzSteps(x: Int): Int {
 fun sin(x: Double, eps: Double): Double {
     var unit = 0.0
     var factorial = 1.0
-    var z = 0
-    val numeral = 0.0
-    if (x / PI % 2.0 == 0.0) {
+    var z = 0.0
+    if (x / PI % 2.0 == 0.0) return 0.0
+    else if ((x + PI / 2) / PI % 2.0 == 0.0) return -1.0
+    else if ((x + PI / 2) / PI % 1.0 == 0.0) return 1.0
+    else {
         do {
             for (i in 1..Int.MAX_VALUE step 4) {
-                z = (pow(numeral, i.toDouble()) / factorial).toInt()
+                z = (pow(x, i.toDouble()) / factorial); unit += z
                 if (z < eps) break
-                unit += z
                 factorial *= (i + 1) * (i + 2)
-                z = (pow(numeral, (i + 2).toDouble()) / factorial).toInt()
+                z = (pow(x, (i + 2).toDouble()) / factorial); unit -= z
                 if (z < eps) break
-                unit -= z
-                factorial *= (i + 3) * (i + 4)
-            }
-        } while (z > eps)
-    } else {
-        do {
-            var z = 0.0
-            for (i in 1..Int.MAX_VALUE step 4) {
-                z = (pow(x, i.toDouble()) / factorial)
-                if (z < eps) break
-                unit += z
-                factorial *= (i + 1) * (i + 2)
-                z = (pow(x, (i + 2).toDouble()) / factorial)
-                if (z < eps) break
-                unit -= z
                 factorial *= (i + 3) * (i + 4)
             }
         } while (z > eps)
@@ -240,54 +230,23 @@ fun sin(x: Double, eps: Double): Double {
 fun cos(x: Double, eps: Double): Double {
     var unit = 0.0
     var factorial = 1.0
-    var z = 0
-    val numeral = 0.0
-    if (x / PI % 2.0 == 0.0) {
+    var z = 0.0
+    if ((x + PI / 2) / PI % 1.0 == 0.0) return 0.0
+    else if (x / PI % 2.0 == 0.0) return 1.0
+    else if (x / PI % 1.0 == 0.0) return -1.0
+    else {
         do {
             for (i in 0..Int.MAX_VALUE step 4) {
-                z = (pow(numeral, i.toDouble()) / factorial).toInt()
+                z = (pow(x, i.toDouble()) / factorial); unit += z
                 if (z < eps) break
-                unit += z
                 factorial *= (i + 1) * (i + 2)
-                z = (pow(numeral, (i + 2).toDouble()) / factorial).toInt()
+                z = (pow(x, (i + 2).toDouble()) / factorial); unit -= z
                 if (z < eps) break
-                unit -= z
                 factorial *= (i + 3) * (i + 4)
             }
         } while (z > eps)
-        return unit
-    } else {
-        if (x / PI % 1.0 == 0.0) {
-            do {
-                for (i in 0..Int.MAX_VALUE step 4) {
-                    z = (pow(numeral, i.toDouble()) / factorial).toInt()
-                    if (z < eps) break
-                    unit += z
-                    factorial *= (i + 1) * (i + 2)
-                    z = (pow(numeral, (i + 2).toDouble()) / factorial).toInt()
-                    if (z < eps) break
-                    unit -= z
-                    factorial *= (i + 3) * (i + 4)
-                }
-            } while (z > eps)
-            return unit - 2.0
-        } else {
-            var z = 0.0
-            do {
-                for (i in 0..Int.MAX_VALUE step 4) {
-                    z = (pow(x, i.toDouble()) / factorial)
-                    unit += z
-                    if (z < eps) break
-                    factorial *= (i + 1) * (i + 2)
-                    z = (pow(x, (i + 2).toDouble()) / factorial)
-                    unit -= z
-                    if (z < eps) break
-                    factorial *= (i + 3) * (i + 4)
-                }
-            } while (z > eps)
-            return unit
-        }
     }
+    return unit
 }
 
 /**
@@ -298,22 +257,12 @@ fun cos(x: Double, eps: Double): Double {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun revert(n: Int): Int {
-    var count = 1
+    var number = n
     var revert = 0
-    var numeral = n
-    if (numeral < 10) return n
-    else {
-        while (numeral >= 10) {
-            count++
-            numeral /= 10
-        }
-        var numeral = n
-        for (i in 1..count) {
-            numeral = (n / pow(10.0, (i - 1).toDouble())).toInt()
-            val k = count - i
-            numeral = (numeral % 10 * pow(10.0, k.toDouble())).toInt()
-            revert += numeral
-        }
+    while (number != 0) {
+        val unit = number % 10
+        revert = revert * 10 + unit
+        number /= 10
     }
     return revert
 }
@@ -327,30 +276,7 @@ fun revert(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean {
-    var count = 1
-    var numeral = n
-    var number = 0
-    var unit = n
-    if (n < 10) return true
-    else {
-        while (numeral >= 10) {
-            count++
-            numeral /= 10
-        }
-        var numeral = n
-        for (i in 1..(count / 2)) {
-            val k = count - i
-            numeral = (n / pow(10.0, (i - 1).toDouble())).toInt()
-            number = (unit / pow(10.0, k.toDouble())).toInt()
-            unit = ((n % pow(10.0, (k).toDouble())).toInt())
-            numeral = (numeral % 10)
-            if (numeral == number) continue
-            else break
-        }
-        return numeral == number
-    }
-}
+fun isPalindrome(n: Int): Boolean = n == revert(n)
 
 /**
  * Средняя
