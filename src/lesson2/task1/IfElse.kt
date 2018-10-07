@@ -4,6 +4,7 @@ package lesson2.task1
 import lesson1.task1.discriminant
 import kotlin.math.abs
 import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.sqrt
 
 /**
@@ -101,12 +102,13 @@ fun timeForHalfWay(t1: Double, v1: Double,
 fun whichRookThreatens(kingX: Int, kingY: Int,
                        rookX1: Int, rookY1: Int,
                        rookX2: Int, rookY2: Int): Int {
-    when{
-        (((kingX == rookX1) && (kingY == rookY2)) || ((kingY == rookY1) && (kingX == rookX2))) -> return 3
-        ((kingX == rookX1) || (kingY == rookY1)) -> return 1
-        ((kingX == rookX2) || (kingY == rookY2)) -> return 2
-        else -> return 0
-}}
+    return when{
+        (kingX == rookX1) && (kingY == rookY2) || (kingY == rookY1) && (kingX == rookX2) -> 3
+        (kingX == rookX1) || (kingY == rookY1) -> 1
+        (kingX == rookX2) || (kingY == rookY2) -> 2
+        else -> 0
+    }
+}
 
 
 /**
@@ -139,11 +141,14 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
-    when {
-        (a + b < c) || (a + c < b) || (b + c < a) -> return -1
-        (a * a + b * b == c * c) || (a * a + c * c == b * b) || (b * b + c * c == a * a) -> return 1
-        (a * a + b * b > c * c) && (a * a + c * c > b * b) && (b * b + c * c > a * a) -> return 0
-        else -> return 2
+    val x = a * a
+    val y = b * b
+    val z = c * c
+    return when {
+        minOf((a + b), (a + c), (b + c)) < maxOf(a, b, c) -> -1
+        (x + y == z) || (x + z == y) || (y + z == x) -> 1
+        minOf((x + y), (x + z), (y + z)) > maxOf(x, y, z) -> 0
+        else -> 2
     }
 }
 
@@ -156,11 +161,11 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Если пересечения нет, вернуть -1.
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-    when {
-        (a in c..d && d <= b) -> return d - a
-        (c <= a && d >= b) -> return b - a
-        (c >= a && d <= b) -> return d - c
-        (c in a..b && d >= b) -> return b - c
-        else -> return -1
+    return when {
+        (a in c..d && d <= b) -> d - a
+        (c <= a && d >= b) -> b - a
+        (c >= a && d <= b) -> d - c
+        (c in a..b && d >= b) -> b - c
+        else -> -1
     }
 }
