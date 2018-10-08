@@ -65,7 +65,7 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
 fun ageDescription(age: Int): String = when {
-    (age in 11..14) || (age in 111..114) -> "$age лет"
+    ((age % 100) in 11..14) -> "$age лет"
     (age % 10 == 1) -> "$age год"
     (age % 10 > 1) && (age % 10 < 5) -> "$age года"
     else -> "$age лет"
@@ -101,14 +101,13 @@ fun timeForHalfWay(t1: Double, v1: Double,
  */
 fun whichRookThreatens(kingX: Int, kingY: Int,
                        rookX1: Int, rookY1: Int,
-                       rookX2: Int, rookY2: Int): Int {
-    return when{
-        (kingX == rookX1) && (kingY == rookY2) || (kingY == rookY1) && (kingX == rookX2) -> 3
-        (kingX == rookX1) || (kingY == rookY1) -> 1
-        (kingX == rookX2) || (kingY == rookY2) -> 2
-        else -> 0
-    }
-}
+                       rookX2: Int, rookY2: Int): Int =
+        when {
+            (kingX == rookX1) && (kingY == rookY2) || (kingY == rookY1) && (kingX == rookX2) -> 3
+            (kingX == rookX1) || (kingY == rookY1) -> 1
+            (kingX == rookX2) || (kingY == rookY2) -> 2
+            else -> 0
+        }
 
 
 /**
@@ -162,10 +161,10 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
     return when {
-        (a in c..d && d <= b) -> d - a
-        (c <= a && d >= b) -> b - a
-        (c >= a && d <= b) -> d - c
-        (c in a..b && d >= b) -> b - c
+        maxOf(a, b) in c..d && minOf(a, b) in c..d -> maxOf(a, b) - minOf(a, b)
+        minOf(c, d) in a..b && maxOf(c, d) in a..b -> maxOf(c, d) - minOf(c, d)
+        minOf(c, d) in a..b -> maxOf(a, b) - minOf(c, d)
+        maxOf(c, d) in a..b -> maxOf(c, d) - minOf(a, b)
         else -> -1
     }
 }
