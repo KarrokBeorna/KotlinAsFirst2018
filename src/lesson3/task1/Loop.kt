@@ -313,35 +313,30 @@ fun hasDifferentDigits(n: Int): Boolean {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun squareSequenceDigit(n: Int): Int {
-    var sum = 0.0
-    var p = n - 1
-    for (i in 1..Int.MAX_VALUE) {
-        val k = i * i
-        var m = k
-        var count = 1.0
-        while (m >= 10) {
-            m /= 10
-            count++
+    var s = 0
+    var i = 0
+    var a = 0.0
+    while (s < n) {
+        i++
+        var b = i * i
+        var c = 1
+        val result = b
+        while (b >= 10) {
+            b /= 10
+            c++
         }
-        val l = pow(10.0, count)
-        sum = sum * l + k
-        if (sum >= pow(10.0, p.toDouble())) break
-        var summa = sum
-        var number = 1.0
-        while (summa >= 10.0) {
-            summa /= 10
-            number++
-        }
-        while (sum >= 100.0) {
-            sum %= pow(10.0, number - 1.0)
-            p -= 1
-            number--
-        }
+        s += c
+        if (s == n) return result % 10 else
+            if (s > n) {
+                s -= c
+                while (s != n) {
+                    a = result / pow(10.0, (c - 1).toDouble()) % 10
+                    c--
+                    s++
+                }
+            }
     }
-    while (sum > pow(10.0, (p + 1).toDouble())) {
-        sum /= 10.0
-    }
-    return (sum % 10.0).toInt()
+    return a.toInt()
 }
 
 /**
