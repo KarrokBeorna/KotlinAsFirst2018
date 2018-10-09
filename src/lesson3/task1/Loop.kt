@@ -314,7 +314,8 @@ fun hasDifferentDigits(n: Int): Boolean {
  */
 fun squareSequenceDigit(n: Int): Int {
     var sum = 0.0
-    for (i in 1..n) {
+    var p = n - 1
+    for (i in 1..Int.MAX_VALUE) {
         val k = i * i
         var m = k
         var count = 1.0
@@ -324,9 +325,20 @@ fun squareSequenceDigit(n: Int): Int {
         }
         val l = pow(10.0, count)
         sum = sum * l + k
-        if (sum >= pow(10.0, (n - 1).toDouble())) break
+        if (sum >= pow(10.0, p.toDouble())) break
+        var summa = sum
+        var number = 1.0
+        while (summa >= 10.0) {
+            summa /= 10
+            number++
+        }
+        while (sum >= 100.0) {
+            sum %= pow(10.0, number - 1.0)
+            p -= 1
+            number--
+        }
     }
-    while (sum > pow(10.0, n.toDouble())) {
+    while (sum > pow(10.0, (p + 1).toDouble())) {
         sum /= 10.0
     }
     return (sum % 10.0).toInt()
