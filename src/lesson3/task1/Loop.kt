@@ -199,27 +199,17 @@ fun collatzSteps(x: Int): Int {
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
 fun sin(x: Double, eps: Double): Double {
-    var unit = 0.0
+    val remainder = x % (2 * PI)
     var factorial = 1.0
-    var z = 0.0
-    if (x / PI % 2.0 == 0.0) return 0.0
-    else if ((x + PI / 2) / PI % 2.0 == 0.0) return -1.0
-    else if ((x + PI / 2) / PI % 1.0 == 0.0) return 1.0
-    else {
-        do {
-            for (i in 1..Int.MAX_VALUE step 4) {
-                z = (pow(x, i.toDouble()) / factorial)
-                if (abs(z) <= eps) break
-                unit += z
-                factorial *= (i + 1) * (i + 2)
-                z = (pow(x, (i + 2).toDouble()) / factorial)
-                if (abs(z) <= eps) break
-                unit -= z
-                factorial *= (i + 3) * (i + 4)
-            }
-        } while (abs(z) >= eps)
+    var result = remainder
+    var part = remainder
+    while (abs(part) > eps) {
+        part = -part * remainder * remainder / ((factorial + 1) * (factorial + 2))
+        if (abs(part) < eps) break
+        result += part
+        factorial += 2
     }
-    return unit
+    return result
 }
 
 /**
@@ -230,27 +220,17 @@ fun sin(x: Double, eps: Double): Double {
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
 fun cos(x: Double, eps: Double): Double {
-    var unit = 0.0
-    var factorial = 1.0
-    var z = 0.0
-    if ((x + PI / 2) / PI % 1.0 == 0.0) return 0.0
-    else if (x / PI % 2.0 == 0.0) return 1.0
-    else if (x / PI % 1.0 == 0.0) return -1.0
-    else {
-        do {
-            for (i in 0..Int.MAX_VALUE step 4) {
-                z = (pow(x, i.toDouble()) / factorial)
-                if (abs(z) <= eps) break
-                unit += z
-                factorial *= (i + 1) * (i + 2)
-                z = (pow(x, (i + 2).toDouble()) / factorial)
-                if (abs(z) <= eps) break
-                unit -= z
-                factorial *= (i + 3) * (i + 4)
-            }
-        } while (abs(z) >= eps)
+    val remainder = x % (2 * PI)
+    var factorial = 0.0
+    var result = 1.0
+    var part = 1.0
+    while (abs(part) > eps) {
+        part = -part * remainder * remainder / ((factorial + 1) * (factorial + 2))
+        if (abs(part) < eps) break
+        result += part
+        factorial += 2
     }
-    return abs(unit)
+    return result
 }
 
 /**
