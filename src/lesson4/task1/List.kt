@@ -380,6 +380,7 @@ fun russianNames(n: Int): String {
         n / 1000 % 10 in 2..4 step 1000 -> ""
         else -> when {
             n % 1000 == 0 -> "тысяч"
+            n % 100000 / 1000 in 20..90 step 10 -> "тысяч "
             n % 100000 / 1000 in 3..99 -> " тысяч "
             else -> "тысяч "
         }
