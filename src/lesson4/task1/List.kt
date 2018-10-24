@@ -239,12 +239,14 @@ fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
 fun convert(n: Int, base: Int): List<Int> {
-    val result = mutableListOf<Int>()
+    var result = mutableListOf<Int>()
     var num = n
-    while (num > 0) {
-        result.add(num % base)
-        num /= base
-    }
+    if (n == 0) result = listOf(0).toMutableList()
+    else
+        while (num > 0) {
+            result.add(num % base)
+            num /= base
+        }
     return result.reversed()
 }
 
@@ -259,11 +261,13 @@ fun convert(n: Int, base: Int): List<Int> {
 fun convertToString(n: Int, base: Int): String {
     var result = ""
     var num = n
-    while (num > 0) {
-        val a = num % base
-        result += if (a < 10) a.toString() else ('a' + (a - 10))
-        num /= base
-    }
+    if (n == 0) return "0"
+    else
+        while (num > 0) {
+            val a = num % base
+            result += if (a < 10) a.toString() else ('a' + (a - 10))
+            num /= base
+        }
     return result.reversed()
 }
 
@@ -376,7 +380,7 @@ fun russianNames(n: Int): String {
         n / 1000 % 10 in 2..4 step 1000 -> ""
         else -> when {
             n % 1000 == 0 -> "тысяч"
-            n % 100000 / 1000 in 3..19 -> " тысяч "
+            n % 100000 / 1000 in 3..99 -> " тысяч "
             else -> "тысяч "
         }
     }
