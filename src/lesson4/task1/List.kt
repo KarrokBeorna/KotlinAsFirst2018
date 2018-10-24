@@ -411,8 +411,8 @@ fun russian(n: Int): String {
             k >= 3000 -> char = if (n % 10000 in 1000..2999) russian(n / 10000 * 10) + russianNames(n)
             else russian(n / 1000) + russianNames(n)
             k == 0 -> char = ""
-            k == 1 && num % 100 == 1 -> char = "один"
-            k == 2 && num % 100 == 2 -> char = "два"
+            k == 1 && num % 100 != 11 -> char = "один"
+            k == 2 && num % 100 != 12 -> char = "два"
             k == 3 && (n % 100 != 13) -> char = "три"
             k == 4 && (n % 100 != 14) -> char = "четыре"
             k == 5 && (n % 100 != 15) -> char = "пять"
