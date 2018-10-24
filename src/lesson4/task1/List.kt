@@ -406,11 +406,17 @@ fun russian(n: Int): String {
     var num = n
     for (i in 1..count) {
         val k = (num % pow(10.0, (count + 1 - i).toDouble()) / pow(10.0, (count - i).toDouble())).toInt() * (pow(10.0, (count - i).toDouble())).toInt()
-        num %= if (n % 10000 in 1000..2999) 10000
-        else 1000
+        num %= when {
+            n % 100000 in 11000..19999 -> 1000
+            n % 10000 in 1000..2999 -> 10000
+            else -> 1000
+        }
         when {
-            k >= 3000 -> char = if (n % 10000 in 1000..2999) russian(n / 10000 * 10) + russianNames(n)
-            else russian(n / 1000) + russianNames(n)
+            k >= 3000 -> char = when {
+                n % 100000 in 11000..19999 -> russian(n / 1000) + russianNames(n)
+                n % 10000 in 1000..2999 -> russian(n / 10000 * 10) + russianNames(n)
+                else -> russian(n / 1000) + russianNames(n)
+            }
             k == 0 -> char = ""
             k == 1 && num % 100 != 11 -> char = "один"
             k == 2 && num % 100 != 12 -> char = "два"
@@ -421,7 +427,7 @@ fun russian(n: Int): String {
             k == 7 && (n % 100 != 17) -> char = "семь"
             k == 8 && (n % 100 != 18) -> char = "восемь"
             k == 9 && (n % 100 != 19) -> char = "девять"
-            k == 10 && (n % 100 == 11 || n / 1000 % 100 == 11) -> char = "одиннандцать"
+            k == 10 && (n % 100 == 11 || n / 1000 % 100 == 11) -> char = "одиннадцать"
             k == 10 && (n % 100 == 12 || n / 1000 % 100 == 12) -> char = "двенадцать"
             k == 10 && (n % 100 == 13 || n / 1000 % 100 == 13) -> char = "тринадцать"
             k == 10 && (n % 100 == 14 || n / 1000 % 100 == 14) -> char = "четырнадцать"
