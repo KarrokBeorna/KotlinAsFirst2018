@@ -130,10 +130,7 @@ fun abs(v: List<Double>): Double {
  *
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
-fun mean(list: List<Double>): Double {
-    return if (list.isEmpty()) 0.0 else
-        list.sum() / list.size
-}
+fun mean(list: List<Double>): Double = if (list.isEmpty()) 0.0 else list.sum() / list.size
 
 /**
  * Средняя
@@ -145,7 +142,7 @@ fun mean(list: List<Double>): Double {
  */
 fun center(list: MutableList<Double>): MutableList<Double> {
     val sred = mean(list)
-    for (element in list.indices) list[element] -= sred
+    for (i in list.indices) list[i] -= sred
     return list
 }
 
@@ -217,7 +214,6 @@ fun factorize(n: Int): List<Int> {
             num /= a
             a = 1
         }
-        if (num <= 1) break
     } while (num > 1)
     return result
 }
@@ -271,6 +267,15 @@ fun convertToString(n: Int, base: Int): String {
     return result.reversed()
 }
 
+
+fun poof(base: Int, a: Int): Double {
+    var result = 1
+    for (i in 1..a)
+        result *= base
+    return result.toDouble()
+}
+
+
 /**
  * Средняя
  *
@@ -282,7 +287,7 @@ fun decimal(digits: List<Int>, base: Int): Int {
     var result = 0
     var a = digits.size
     for (i in 0 until a) {
-        result = (result + pow(base.toDouble(), (a - 1).toDouble()) * digits[i]).toInt()
+        result = (result + poof(base, (a - 1)) * digits[i]).toInt()
         a -= 1
     }
     return result
@@ -302,14 +307,16 @@ fun decimalFromString(str: String, base: Int): Int {
     var a = str.length
     val list = mutableListOf<Int>()
     for (i in 0 until a) {
-        var b = str[i].toInt()
-        b -= if (b < 58) 48 else 87
-        list.add(b)
-        result = (result + pow(base.toDouble(), (a - 1).toDouble()) * list[i]).toInt()
+        var b = str[i]
+        b -= if (b <= '9') 48 else 87 //'1' = 49, 'a' = 97, отсюда и появились константы
+        list.add(b.toInt())
+        result = (result + poof(base, (a - 1)) * list[i]).toInt()
         a -= 1
     }
     return result
 }
+
+
 
 /**
  * Сложная
@@ -320,57 +327,28 @@ fun decimalFromString(str: String, base: Int): Int {
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
 fun roman(n: Int): String {
-    var count = 0
-    var number = n
-    while (number > 0) {
-        number /= 10
-        count++
-    }
     var char = ""
     var result = ""
-    for (i in 1..count) {
-        val k = (n % pow(10.0, (count + 1 - i).toDouble()) / pow(10.0, (count - i).toDouble())).toInt() * (pow(10.0, (count - i).toDouble())).toInt()
+    for (i in 1..3) {
+        val k = (n % poof((10), (4 - i)) / poof((10), (3 - i))).toInt() * poof((10), (3 - i)).toInt()
         when (k) {
             0 -> char = ""
-            1 -> char = "I"
-            2 -> char = "II"
-            3 -> char = "III"
+            in 1..3 -> char = "I".repeat(k)
             4 -> char = "IV"
-            5 -> char = "V"
-            6 -> char = "VI"
-            7 -> char = "VII"
-            8 -> char = "VIII"
+            in 5..8 -> char = "V" + "I".repeat(k - 5)
             9 -> char = "IX"
-            10 -> char = "X"
-            20 -> char = "XX"
-            30 -> char = "XXX"
+            in 10..30 -> char = "X".repeat(k / 10)
             40 -> char = "XL"
-            50 -> char = "L"
-            60 -> char = "LX"
-            70 -> char = "LXX"
-            80 -> char = "LXXX"
+            in 50..80 -> char = "L" + "X".repeat((k - 50) / 10)
             90 -> char = "XC"
-            100 -> char = "C"
-            200 -> char = "CC"
-            300 -> char = "CCC"
+            in 100..300 -> char = "C".repeat(k / 100)
             400 -> char = "CD"
-            500 -> char = "D"
-            600 -> char = "DC"
-            700 -> char = "DCC"
-            800 -> char = "DCCC"
+            in 500..800 -> char = "D" + "C".repeat((k - 500) / 100)
             900 -> char = "CM"
-            1000 -> char = "M"
-            else -> {
-                var c = k / 1000
-                while (c > 0) {
-                    char += "M"
-                    c--
-                }
-            }
         }
         result += char
     }
-    return result
+    return "M".repeat(n / 1000) + result
 }
 
 fun russianNames(n: Int): String {
