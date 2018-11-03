@@ -361,7 +361,7 @@ fun russianNames(n: Int): String {
     return when {
         n / 1000 % 100 in 10..19 && n % 1000 == 0 -> " тысяч"
         n / 1000 % 100 in 10..19 -> " тысяч "
-        n / 1000 % 10 == 1 && n % 1000 == 0 -> "тысяча"
+        n / 1000 % 10 == 1 && n % 1000 == 0 -> " тысяча"
         n / 1000 % 10 == 1 -> " тысяча "
         n / 1000 % 10 in 2..4 && n % 1000 == 0 -> " тысячи"
         n / 1000 % 10 in 2..4 -> " тысячи "
@@ -400,7 +400,7 @@ fun russian(n: Int): String {
                 else -> russian(n / 1000) + russianNames(n)
             }
             k == 0 -> ""
-            k in 1..9 && (num % 100 > 19 || num % 100 < 10) -> russianUnits[k - 1]
+            k in 1..9 && ((num % 100) !in 10..19) -> russianUnits[k - 1]
             k in 10..19 && num % 100 in 10..19 -> russianFavorites[num % 100 - 10]
             k in 20..90 step 10 -> if (num % 100 in 20..90 step 10) russianTens[k / 10 - 2] else russianTens[k / 10 - 2] + " "
             k in 100..900 step 100 -> if (num % 1000 in 100..900 step 100) russianHundreds[k / 100 - 1] else russianHundreds[k / 100 - 1] + " "
