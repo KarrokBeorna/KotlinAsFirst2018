@@ -268,11 +268,11 @@ fun convertToString(n: Int, base: Int): String {
 }
 
 
-fun poof(base: Int, a: Int): Double {
+fun pow(base: Int, a: Int): Int {
     var result = 1
     for (i in 1..a)
         result *= base
-    return result.toDouble()
+    return result
 }
 
 
@@ -287,7 +287,7 @@ fun decimal(digits: List<Int>, base: Int): Int {
     var result = 0
     var a = digits.size
     for (i in 0 until a) {
-        result = (result + poof(base, (a - 1)) * digits[i]).toInt()
+        result += pow(base, (a - 1)) * digits[i]
         a -= 1
     }
     return result
@@ -310,7 +310,7 @@ fun decimalFromString(str: String, base: Int): Int {
         var b = str[i]
         b -= if (b <= '9') 48 else 87 //'1' = 49, 'a' = 97, отсюда и появились константы
         list.add(b.toInt())
-        result = (result + poof(base, (a - 1)) * list[i]).toInt()
+        result += pow(base, (a - 1)) * list[i]
         a -= 1
     }
     return result
@@ -330,7 +330,7 @@ fun roman(n: Int): String {
     var char = ""
     var result = ""
     for (i in 1..3) {
-        val k = (n % poof((10), (4 - i)) / poof((10), (3 - i))).toInt() * poof((10), (3 - i)).toInt()
+        val k = n % pow((10), (4 - i)) / pow((10), (3 - i)) * pow((10), (3 - i))
         when (k) {
             0 -> char = ""
             in 1..3 -> char = "I".repeat(k)
@@ -352,9 +352,12 @@ fun roman(n: Int): String {
 }
 
 val russianUnits = listOf("один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять")
-val russianFavorites = listOf("десять", "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать", "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать")
-val russianTens = listOf("двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят", "восемьдесят", "девяносто")
-val russianHundreds = listOf("сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот")
+val russianTeens = listOf("десять", "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать",
+        "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать")
+val russianTens = listOf("двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят",
+        "семьдесят", "восемьдесят", "девяносто")
+val russianHundreds = listOf("сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот",
+        "семьсот", "восемьсот", "девятьсот")
 val russianExceptions = listOf("одна", "две")
 
 fun russianNames(n: Int): String {
@@ -387,7 +390,7 @@ fun russian(n: Int): String {
     var result = ""
     var num = n
     for (i in 1..c) {
-        val k = (num % poof((10), (c + 1 - i)) / poof((10), (c - i))).toInt() * (poof((10), (c - i))).toInt()
+        val k = num % pow((10), (c + 1 - i)) / pow((10), (c - i)) * pow((10), (c - i))
         num %= when {
             n % 100000 in 11000..19999 -> 1000
             n % 10000 in 1000..2999 -> 10000
@@ -401,7 +404,7 @@ fun russian(n: Int): String {
             }
             k == 0 -> ""
             k in 1..9 && ((num % 100) !in 10..19) -> russianUnits[k - 1]
-            k in 10..19 && num % 100 in 10..19 -> russianFavorites[num % 100 - 10]
+            k in 10..19 && num % 100 in 10..19 -> russianTeens[num % 100 - 10]
             k in 20..90 step 10 -> if (num % 100 in 20..90 step 10) russianTens[k / 10 - 2] else russianTens[k / 10 - 2] + " "
             k in 100..900 step 100 -> if (num % 1000 in 100..900 step 100) russianHundreds[k / 100 - 1] else russianHundreds[k / 100 - 1] + " "
             k in 1000..2000 step 1000 -> russianExceptions[k / 1000 - 1] + russianNames(n)
