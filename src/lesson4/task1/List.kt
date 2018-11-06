@@ -305,12 +305,10 @@ fun decimal(digits: List<Int>, base: Int): Int {
 fun decimalFromString(str: String, base: Int): Int {
     var result = 0
     var a = str.length
-    val list = mutableListOf<Int>()
     for (i in 0 until a) {
-        var b = str[i]
-        b -= if (b <= '9') 48 else 87 //'1' = 49, 'a' = 97, отсюда и появились константы
-        list.add(b.toInt())
-        result += pow(base, (a - 1)) * list[i]
+        val b = str[i]
+        val c = if (b <= '9') b - '0' else b - 'a' + 10
+        result += pow(base, (a - 1)) * c
         a -= 1
     }
     return result
@@ -329,8 +327,9 @@ fun decimalFromString(str: String, base: Int): Int {
 fun roman(n: Int): String {
     var char = ""
     var result = ""
-    for (i in 1..3) {
-        val k = n % pow((10), (4 - i)) / pow((10), (3 - i)) * pow((10), (3 - i))
+    val a = if (n > 999) 3 else n.toString().length
+    for (i in 1..a) {
+        val k = n % pow((10), (a + 1 - i))
         when (k) {
             0 -> char = ""
             in 1..3 -> char = "I".repeat(k)
@@ -338,13 +337,13 @@ fun roman(n: Int): String {
             in 5..8 -> char = "V" + "I".repeat(k - 5)
             9 -> char = "IX"
             in 10..30 -> char = "X".repeat(k / 10)
-            40 -> char = "XL"
-            in 50..80 -> char = "L" + "X".repeat((k - 50) / 10)
-            90 -> char = "XC"
-            in 100..300 -> char = "C".repeat(k / 100)
-            400 -> char = "CD"
+            in 40..49 -> char = "XL"
+            in 50..89 -> char = "L" + "X".repeat((k - 50) / 10)
+            in 90..99 -> char = "XC"
+            in 100..399 -> char = "C".repeat(k / 100)
+            in 400..499 -> char = "CD"
             in 500..800 -> char = "D" + "C".repeat((k - 500) / 100)
-            900 -> char = "CM"
+            in 900..999 -> char = "CM"
         }
         result += char
     }
