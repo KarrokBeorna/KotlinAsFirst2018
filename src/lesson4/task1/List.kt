@@ -314,8 +314,6 @@ fun decimalFromString(str: String, base: Int): Int {
     return result
 }
 
-
-
 /**
  * Сложная
  *
