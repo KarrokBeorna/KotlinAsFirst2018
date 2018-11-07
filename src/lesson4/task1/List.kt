@@ -334,13 +334,13 @@ fun roman(n: Int): String {
             4 -> char = "IV"
             in 5..8 -> char = "V" + "I".repeat(k - 5)
             9 -> char = "IX"
-            in 10..30 -> char = "X".repeat(k / 10)
+            in 10..39 -> char = "X".repeat(k / 10)
             in 40..49 -> char = "XL"
             in 50..89 -> char = "L" + "X".repeat((k - 50) / 10)
             in 90..99 -> char = "XC"
             in 100..399 -> char = "C".repeat(k / 100)
             in 400..499 -> char = "CD"
-            in 500..800 -> char = "D" + "C".repeat((k - 500) / 100)
+            in 500..899 -> char = "D" + "C".repeat((k - 500) / 100)
             in 900..999 -> char = "CM"
         }
         result += char
