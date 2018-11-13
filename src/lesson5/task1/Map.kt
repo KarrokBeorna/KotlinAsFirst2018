@@ -230,7 +230,7 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): MutableMap<String, S
         if (i !in sheet) sheet.add(i)
     for ((name, friend) in friends) {
         for ((man, people) in friends) {
-            if (man in friend.toList()) map += Pair(name, (friend + (people - name)).toSortedSet())
+            if (man in friend) map += Pair(name, (friend + (people - name)))
         }
     }
     if ((sheet - listName).isNotEmpty())
@@ -357,11 +357,15 @@ fun hasAnagrams(words: List<String>): Boolean {
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     var a = Pair(-1, -1)
-    for (i in list.sorted()) {
-        if (list.sorted().last() < number / 2 || list.sorted().first() > number / 2) break
-        val n = number - i
-        if (n in list) a = i - 1 to n - 1; break
-    }
+    if (list.isNotEmpty())
+        for (i in 0 until list.size) {
+            if (list.sorted().last() < number / 2 || list.sorted().first() > number / 2) break
+            val n = number - list[i]
+            if (n in (list - list[i])) {
+                a = i to list.indexOf(n)
+                break
+            }
+        }
     return a
 }
 
