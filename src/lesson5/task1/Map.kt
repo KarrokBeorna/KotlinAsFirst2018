@@ -228,14 +228,16 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): MutableMap<String, S
     }
     for (i in list)
         if (i !in sheet) sheet.add(i)
-    for ((name, friend) in friends) {
-        val set = mutableSetOf<String>()
-        set += friend
-        for ((man, people) in friends) {
-            if (man in set) {
-                set += people - name
-                map += Pair(name, set)
+    for (i in 1..friends.size) {
+        for ((name, friend) in friends) {
+            val set = mutableSetOf<String>()
+            set += friend
+            for ((man, people) in friends) {
+                if (man in set) {
+                    set += people - name
+                    map += Pair(name, set)
 
+                }
             }
         }
     }
