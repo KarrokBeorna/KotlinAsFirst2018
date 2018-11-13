@@ -331,15 +331,12 @@ fun hasAnagrams(words: List<String>): Boolean {
         for (element in a)
             list.add(element)
         for (k in (i + 1) until words.size) {
-            val letter = mutableListOf<Char>()
             val say = words[k]
             for (its in say)
-                letter.add(its)
-            for (c in letter)
-                if (c in list) answer.add(c)
-            if (answer.sorted() == list.sorted() && list.isNotEmpty()) break else answer.clear()
+                if (its in list) answer.add(its)
+            if ((answer.sorted() == list.sorted()) && list.isNotEmpty()) break else answer.clear()
         }
-        if (answer.sorted() == list.sorted()) break
+        if (answer.isNotEmpty()) break
     }
     return answer.isNotEmpty()
 }
