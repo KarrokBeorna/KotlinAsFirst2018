@@ -325,7 +325,7 @@ fun decimalFromString(str: String, base: Int): Int {
 fun roman(n: Int): String {
     var char = ""
     var result = ""
-    val a = if (n > 999) 3 else n.toString().length
+    val a = (n % 1000).toString().length
     for (i in 1..a) {
         val k = n % pow((10), (a + 1 - i))
         when (k) {
