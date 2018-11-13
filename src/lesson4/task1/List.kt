@@ -325,9 +325,10 @@ fun decimalFromString(str: String, base: Int): Int {
 fun roman(n: Int): String {
     var char = ""
     var result = ""
-    val a = (n % 1000).toString().length
+    val a = 3
     for (i in 1..a) {
-        val k = n % pow((10), (a + 1 - i))
+        val q = lesson4.task1.pow((10), (a - i))
+        val k = n % pow((10), (a + 1 - i)) / q * q
         when (k) {
             0 -> char = ""
             in 1..3 -> char = "I".repeat(k)
