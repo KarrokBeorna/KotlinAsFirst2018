@@ -118,12 +118,12 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  */
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     var reverse = mapOf<Int, List<String>>()
-    for (i in 5 downTo 2) {
+    for ((_, grade) in grades) {
         val list = mutableListOf<String>()
-        for ((name, grade) in grades) {
-            if (grade == i) list.add(name)
+        for ((name, num) in grades) {
+            if (num == grade) list.add(name)
         }
-        if (list.isNotEmpty()) reverse += i to list.sortedDescending()
+        if (list.isNotEmpty()) reverse += grade to list.sortedDescending()
     }
     return reverse
 }
