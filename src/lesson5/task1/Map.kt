@@ -337,7 +337,7 @@ fun hasAnagrams(words: List<String>): Boolean {
                 letter.add(its)
             for (c in letter)
                 if (c in list) answer.add(c)
-            if (answer.sorted() == list.sorted()) break else answer.clear()
+            if (answer.sorted() == list.sorted() && list.isNotEmpty()) break else answer.clear()
         }
         if (answer.sorted() == list.sorted()) break
     }
