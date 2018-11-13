@@ -278,7 +278,10 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.filter { it
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean = word.all { it in chars }
+fun canBuildFrom(chars: List<Char>, word: String): Boolean {
+    val a = chars.map { it.toLowerCase() }
+    return word.toLowerCase().all { it in a }
+}
 
 /**
  * Средняя
