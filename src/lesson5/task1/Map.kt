@@ -228,10 +228,10 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): MutableMap<String, S
     }
     for (i in list)
         if (i !in sheet) sheet.add(i)
-    for (i in 1..friends.size) {
-        for ((name, friend) in friends) {
-            val set = mutableSetOf<String>()
-            set += friend
+    for ((name, friend) in friends) {
+        val set = mutableSetOf<String>()
+        set += friend
+        for (i in 1..friends.size) {
             for ((man, people) in friends) {
                 if (man in set) {
                     set += people - name
@@ -325,8 +325,8 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  */
 fun hasAnagrams(words: List<String>): Boolean {
     val wordsAnswer = words.map { it.toList().sorted() }
-    for (i in 0..wordsAnswer.size - 2)
-        for (k in i + 1 until wordsAnswer.size)
+    for (i in 0..(wordsAnswer.size - 2))
+        for (k in (i + 1) until wordsAnswer.size)
             if (wordsAnswer[i] == wordsAnswer[k])
                 return true
     return false
