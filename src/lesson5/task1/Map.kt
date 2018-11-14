@@ -324,25 +324,14 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
 fun hasAnagrams(words: List<String>): Boolean {
-    val answer = mutableListOf<Char>()
-    var count = 0
-    for (i in words)
-        if (i == "") count++
-    val wordsAnswer = words.filter { it != "" }
-    if (count >= 2)
-        for (i in 0 until wordsAnswer.size) {
-            val list = mutableListOf<Char>()
-            for (element in wordsAnswer[i])
-                list.add(element)
-            for (k in (i + 1) until wordsAnswer.size) {
-                for (its in wordsAnswer[k])
-                    if (its in list) answer.add(its)
-                if (answer.sorted() == list.sorted()) break else answer.clear()
-            }
-            if (answer.isNotEmpty()) break
-        }
-    return (answer.isNotEmpty() || count >= 2)
+    val wordsAnswer = words.map { it.toList().sorted() }
+    for (i in 0..wordsAnswer.size - 2)
+        for (k in i + 1 until wordsAnswer.size)
+            if (wordsAnswer[i] == wordsAnswer[k])
+                return true
+    return false
 }
+
 
 /**
  * Сложная
