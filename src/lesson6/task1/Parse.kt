@@ -2,6 +2,8 @@
 
 package lesson6.task1
 
+import lesson2.task2.daysInMonth
+
 /**
  * Пример
  *
@@ -49,16 +51,16 @@ fun main(args: Array<String>) {
         val seconds = timeStrToSeconds(line)
         if (seconds == -1) {
             println("Введённая строка $line не соответствует формату ЧЧ:ММ:СС")
-        }
-        else {
+        } else {
             println("Прошло секунд с начала суток: $seconds")
         }
-    }
-    else {
+    } else {
         println("Достигнут <конец файла> в процессе чтения строки. Программа прервана")
     }
 }
 
+val months = listOf("января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа",
+        "сентября", "октября", "ноября", "декабря")
 
 /**
  * Средняя
@@ -71,7 +73,19 @@ fun main(args: Array<String>) {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun dateStrToDigit(str: String): String = TODO()
+fun dateStrToDigit(str: String): String {
+    val parts = str.split(" ")
+    val month: Int
+    try {
+        month = months.indexOf(parts[1]) + 1
+        if (month !in 1..12) throw Exception()
+    } catch (e: Exception) {
+        return ""
+    }
+    val day = parts[0].toInt()
+    val year = parts[2].toInt()
+    return if (day in 1..daysInMonth(month, year)) String.format("%02d.%02d.%d", day, month, year) else ""
+}
 
 /**
  * Средняя
@@ -83,7 +97,20 @@ fun dateStrToDigit(str: String): String = TODO()
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30 февраля 2009) считается неверными
  * входными данными.
  */
-fun dateDigitToStr(digital: String): String = TODO()
+fun dateDigitToStr(digital: String): String {
+    val parts = digital.split(".")
+    val month: String
+    try {
+        if (parts.size != 3) throw Exception()
+        month = months[parts[1].toInt() - 1]
+        if (parts[1].toInt() !in 1..12) throw Exception()
+    } catch (e: Exception) {
+        return ""
+    }
+    val day = parts[0].toInt()
+    val year = parts[2].toInt()
+    return if (day in 1..daysInMonth(parts[1].toInt(), year)) String.format("%d %s %d", day, month, year) else ""
+}
 
 /**
  * Средняя
