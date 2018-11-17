@@ -120,11 +120,12 @@ fun dateDigitToStr(digital: String): String {
  * Может присутствовать неограниченное количество пробелов и чёрточек,
  * например, номер 12 --  34- 5 -- 67 -98 тоже следует считать легальным.
  * Перевести номер в формат без скобок, пробелов и чёрточек (но с +), например,
- * "+79211234567" или "123456789" для приведённых примеров.
+ * "+79211234567" или "123456798" для приведённых примеров.
  * Все символы в номере, кроме цифр, пробелов и +-(), считать недопустимыми.
  * При неверном формате вернуть пустую строку
  */
-fun flattenPhoneNumber(phone: String): String = TODO()
+fun flattenPhoneNumber(phone: String): String = if (Regex("""^\+?([\s()\-\d])+""").matches(phone))
+    Regex("""[\s-()]""").replace(phone, "") else ""
 
 /**
  * Средняя
@@ -136,8 +137,14 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
-
+fun bestLongJump(jumps: String): Int {
+    return if (Regex("""([\s\-%\d])+""").matches(jumps)) {
+        val max = jumps.replace(Regex("""[%-]"""), "").replace(Regex("""\s+"""), " ")
+        if (max != " " && max != "")
+            max.split(" ").map { it.toInt() }.max() ?: -1
+        else -1
+    } else -1
+}
 /**
  * Сложная
  *
