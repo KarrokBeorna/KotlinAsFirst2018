@@ -137,18 +137,16 @@ fun flattenPhoneNumber(phone: String): String = if (Regex("""^\+?([\s()\-\d])+""
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int {
-    return if (Regex("""([\s\-%\d])+""").matches(jumps)) {
-        val max = jumps.replace(Regex("""[%\-]"""), "").replace(Regex("""\s+"""), " ")
-        max.split(" ").map {
-            try {
-                it.toInt()
-            } catch (e: Exception) {
-                -1
-            }
-        }.max()!!
-    } else -1
-}
+fun bestLongJump(jumps: String): Int = if (Regex("""([\s\-%\d])+""").matches(jumps)) {
+    val max = jumps.replace(Regex("""[%\-]"""), "").replace(Regex("""\s+"""), " ")
+    max.split(" ").map {
+        try {
+            it.toInt()
+        } catch (e: Exception) {
+            -1
+        }
+    }.max()!!
+} else -1
 /**
  * Сложная
  *
@@ -159,23 +157,22 @@ fun bestLongJump(jumps: String): Int {
  * Прочитать строку и вернуть максимальную взятую высоту (230 в примере).
  * При нарушении формата входной строки вернуть -1.
  */
-fun bestHighJump(jumps: String): Int {
-    return if (Regex("""([\s\-%+\d])+""").matches(jumps)) {
-        val max = jumps
-                .replace(Regex("""\s+"""), "")
-                .replace(Regex("""(%+\+)"""), "+")
-                .replace(Regex("""%+"""), "-")
-                .replace(Regex("""-+(\+-)(-\+)"""), "-")
-                .replace(Regex("""(\d+-+)"""), "")
-        max.split("+").map {
-            try {
-                it.toInt()
-            } catch (e: Exception) {
-                -1
-            }
-        }.max()!!
-    } else -1
-}
+fun bestHighJump(jumps: String): Int = if (Regex("""([\s\-%+\d])+""").matches(jumps)) {
+    val max = jumps
+            .replace(Regex("""\s+"""), "")
+            .replace(Regex("""(%+\+)"""), "+")
+            .replace(Regex("""%+"""), "-")
+            .replace(Regex("""-+(\+-)(-\+)"""), "-")
+            .replace(Regex("""(\d+-+)"""), "")
+    max.split("+").map {
+        try {
+            it.toInt()
+        } catch (e: Exception) {
+            -1
+        }
+    }.max()!!
+} else -1
+
 
 /**
  * Сложная
@@ -186,7 +183,13 @@ fun bestHighJump(jumps: String): Int {
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int = TODO()
+fun plusMinus(expression: String): Int = if (Regex("""^\d+([\s]*[-|+][\s]*\d+)*""").matches(expression)) {
+    expression
+            .replace(Regex("""\s+"""), "")
+            .split((Regex("""(?=[-|+])""")))
+            .map { it.toInt() }
+            .sum()
+} else throw IllegalArgumentException()
 
 /**
  * Сложная
