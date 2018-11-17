@@ -163,6 +163,7 @@ fun bestHighJump(jumps: String): Int {
     return if (Regex("""([\s\-%+\d])+""").matches(jumps)) {
         val max = jumps
                 .replace(Regex("""\s+"""), "")
+                .replace(Regex("""(%+\+)"""), "+")
                 .replace(Regex("""%+"""), "-")
                 .replace(Regex("""-+(\+-)(-\+)"""), "-")
                 .replace(Regex("""(\d+-+)"""), "")
