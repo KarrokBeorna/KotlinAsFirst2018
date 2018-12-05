@@ -117,16 +117,10 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *   buildGrades(mapOf("Марат" to 3, "Семён" to 5, "Михаил" to 5))
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
-fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
-    var reverse = mapOf<Int, List<String>>()
-    for ((key, _) in grades) {
-        val list = mutableListOf<String>()
-        for ((name, _) in grades)
-            if (grades[name] == grades[key]) list.add(name)
-        if (list.isNotEmpty()) reverse += grades[key]!! to list.sortedDescending()
-    }
-    return reverse
-}
+fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = grades
+        .map { it.key }
+        .groupBy { grades[it]!! }
+        .toSortedMap()
 
 /**
  * Простая
