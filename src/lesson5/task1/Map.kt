@@ -97,11 +97,12 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *   ) -> mapOf("Emergency" to "112, 911", "Police" to "02")
  */
 fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
-    val book = mutableMapOf<String, String>()
-    book += mapA + mapB
+    var book = mapA + mapB
     for ((key, value) in mapB) {
-        for ((name, phone) in mapA)
-            if (key == name && value != phone) book += Pair(key, "$phone, $value")
+        if (key in mapA && value != mapA[key]) {
+            val a = mapA[key]
+            book += Pair(key, "$a, $value")
+        }
     }
     return book
 }
@@ -118,12 +119,11 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  */
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     var reverse = mapOf<Int, List<String>>()
-    for ((_, grade) in grades) {
+    for ((key, _) in grades) {
         val list = mutableListOf<String>()
-        for ((name, num) in grades) {
-            if (num == grade) list.add(name)
-        }
-        if (list.isNotEmpty()) reverse += grade to list.sortedDescending()
+        for ((name, _) in grades)
+            if (grades[name] == grades[key]) list.add(name)
+        if (list.isNotEmpty()) reverse += grades[key]!! to list.sortedDescending()
     }
     return reverse
 }
@@ -178,18 +178,10 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  *     "печенье"
  *   ) -> "Мария"
  */
-fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
-    val list = mutableListOf<Double>()
-    var answer = ""
-    for ((_, typeCost) in stuff)
-        if (typeCost.first == kind) list.add(typeCost.second)
-    return if (list.isNotEmpty()) {
-        val min = Collections.min(list)
-        for ((productName, typeCost) in stuff)
-            if (typeCost.second == min) answer = productName
-        answer
-    } else null
-}
+fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? = stuff
+        .filter { (_, typeCost) -> typeCost.first == kind }
+        .minBy { (_, typeCost) -> typeCost.second }
+        ?.component1()
 
 /**
  * Сложная
@@ -260,15 +252,7 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): MutableMap<String, S
  *   subtractOf(a = mutableMapOf("a" to "z"), mapOf("a" to "z"))
  *     -> a changes to mutableMapOf() aka becomes empty
  */
-fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Map<String, String> {
-    val list = mutableListOf<String>()
-    for ((k, v) in a)
-        for ((key, value) in b)
-            if (key == k && value == v) list.add(k)
-    for (k in list)
-        a.remove(k)
-    return a
-}
+fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) = a.keys.removeIf { b[it] == a[it] }
 
 /**
  * Простая
@@ -303,16 +287,10 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
  * Например:
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
-fun extractRepeats(list: List<String>): Map<String, Int> {
-    val map = mutableMapOf<String, Int>()
-    for (i in list) {
-        val letter = mutableListOf<String>()
-        for (it in list)
-            if (it == i) letter.add(it)
-        if (letter.size > 1) map += Pair(i, letter.size)
-    }
-    return map
-}
+fun extractRepeats(list: List<String>): Map<String, Int> = list
+        .groupingBy { it }
+        .eachCount()
+        .filterValues { it != 1 }
 
 /**
  * Средняя
