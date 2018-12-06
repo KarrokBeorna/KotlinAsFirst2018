@@ -144,18 +144,14 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = a.all 
  *   averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
-fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
-    val average = mutableMapOf<String, Double>()
-    for ((stock, _) in stockPrices) {
-        val list = mutableListOf<Double>()
-        for ((share, cost) in stockPrices) {
-            if (share == stock) list.add(cost)
+fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = stockPrices
+        .groupBy { it.first }
+        .mapValues {
+            val count = it.value.size
+            it.value
+                    .map { it.second / count }
+                    .sum()
         }
-        val c = list.sum() / list.size
-        average += Pair(stock, c)
-    }
-    return average
-}
 
 /**
  * Средняя
@@ -204,31 +200,26 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
 fun propagateHandshakes(friends: Map<String, Set<String>>): MutableMap<String, Set<String>> {
     val map = mutableMapOf<String, Set<String>>()
     map += friends
-    val list = mutableListOf<String>()
-    val sheet = mutableListOf<String>()
+    val sheet = mutableSetOf<String>()
     val listName = mutableListOf<String>()
-    val c = setOf<String>()
     for ((name, friend) in friends) {
         listName.add(name)
-        list += friend.toList() + name
+        sheet += friend + name
     }
-    for (i in list)
-        if (i !in sheet) sheet.add(i)
     for ((name, friend) in friends) {
-        val set = mutableSetOf<String>()
-        set += friend
+        var plur = friend
         for (i in 1..friends.size) {
             for ((man, people) in friends) {
-                if (man in set) {
-                    set += people - name
-                    map += Pair(name, set)
+                if (man in plur) {
+                    plur += people - name
+                    map += Pair(name, plur)
 
                 }
             }
         }
     }
     if ((sheet - listName).isNotEmpty())
-        for (i in (sheet - listName)) map[i] = c
+        for (i in (sheet - listName)) map[i] = emptySet()
     return map
 }
 
@@ -324,16 +315,18 @@ fun hasAnagrams(words: List<String>): Boolean {
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     var a = Pair(-1, -1)
-    if (list.isNotEmpty())
+    list.sorted()
+    return if (list.isEmpty() || list.last() < number / 2 || list.first() > number / 2) a
+    else {
         for (i in 0 until list.size) {
-            if (list.sorted().last() < number / 2 || list.sorted().first() > number / 2) break
             val n = number - list[i]
             if (n in (list - list[i])) {
                 a = i to list.indexOf(n)
                 break
             }
         }
-    return a
+        a
+    }
 }
 
 /**
