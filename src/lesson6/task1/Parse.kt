@@ -226,7 +226,36 @@ fun firstDuplicateIndex(str: String): Int {
  * или пустую строку при нарушении формата строки.
  * Все цены должны быть больше либо равны нуля.
  */
-fun mostExpensive(description: String): String = TODO()
+fun mostExpensive(description: String): String = if (Regex("""(\S+\s\d+\.\d+)(;\s\S+\s\d+\.\d+)*""").matches(description)) {
+    var max = 0.0
+    var answer = ""
+    description
+            .split("; ")
+            .map { it.split(" ") }
+            .forEach {
+                if (it[1].toDouble() >= max) {
+                    max = it[1].toDouble()
+                    answer = it[0]
+                }
+            }
+    answer
+} else ""
+
+val elements = mapOf(
+        "CM" to 900,
+        "CD" to 400,
+        "XC" to 90,
+        "XL" to 40,
+        "IX" to 9,
+        "IV" to 4,
+        "M" to 1000,
+        "D" to 500,
+        "C" to 100,
+        "L" to 50,
+        "X" to 10,
+        "V" to 5,
+        "I" to 1
+)
 
 /**
  * Сложная
@@ -239,8 +268,13 @@ fun mostExpensive(description: String): String = TODO()
  *
  * Вернуть -1, если roman не является корректным римским числом
  */
-fun fromRoman(roman: String): Int = TODO()
-
+fun fromRoman(roman: String): Int =
+        if (Regex("""M*(CM|CD|DC{0,3}|C{0,3})?(XC|XL|LX{0,3}|X{0,3})?(IX|IV|VI{0,3}|I{0,3})?""").matches(roman)) {
+            Regex("""M|CM|D|CD|C|XC|L|XL|X|IX|V|IV|I""")
+                    .findAll(roman)
+                    .map { elements[it.value] }
+                    .sumBy { it!! }
+} else -1
 /**
  * Очень сложная
  *
@@ -278,3 +312,23 @@ fun fromRoman(roman: String): Int = TODO()
  *
  */
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()
+
+fun seriesLength(input: String): String = if (input != "") {
+    var answer = ""
+    var count = 1
+    for (i in 0 until input.length - 1) {
+        val a = input[i]
+        if (input[i + 1] == input[i]) count++
+        else {
+            if (count > 1) {
+                answer += "$a$count"
+                count = 1
+            } else answer += "$a"
+        }
+    }
+    val a = input[input.length - 1]
+    answer += if (count > 1 && input[input.length - 2] == input[input.length - 1]) {
+        "$a$count"
+    } else "$a"
+    answer
+} else ""

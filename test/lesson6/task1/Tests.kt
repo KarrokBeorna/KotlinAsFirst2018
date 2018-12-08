@@ -1,5 +1,6 @@
 package lesson6.task1
 
+import lesson6.task1.seriesLength
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Tag
@@ -109,6 +110,7 @@ class Tests {
         assertEquals(40, firstDuplicateIndex("Яблоко упало на ветку с ветки оно упало на на землю"))
         assertEquals(9, firstDuplicateIndex("Мы пошли прямо Прямо располагался магазин"))
         assertEquals(9, firstDuplicateIndex("Мы пошли Прямо прямо располагался магазин"))
+        assertEquals(0, firstDuplicateIndex("Он он пошёл в школу"))
     }
 
     @Test
@@ -148,4 +150,13 @@ class Tests {
         assertThrows(IllegalArgumentException::class.java) { computeDeviceCells(10, "+>+>[+>", 3) }
         assertThrows(IllegalStateException::class.java) { computeDeviceCells(20, ">>>>>>>>>>>>>", 12) }
     }
+
+    @Test
+    fun seriesLength() {
+        assertEquals("a3bab2cb3", seriesLength("aaababbcbbb"))
+        assertEquals("", seriesLength(""))
+        assertEquals("fpq4jb2c", seriesLength("fpqqqqjbbc"))
+        assertEquals("fpq4jkprf", seriesLength("fpqqqqjkprf"))
+    }
 }
+
