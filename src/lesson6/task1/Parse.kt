@@ -226,20 +226,21 @@ fun firstDuplicateIndex(str: String): Int {
  * или пустую строку при нарушении формата строки.
  * Все цены должны быть больше либо равны нуля.
  */
-fun mostExpensive(description: String): String = if (Regex("""(\S+\s\d+\.\d+)(;\s\S+\s\d+\.\d+)*""").matches(description)) {
-    var max = 0.0
-    var answer = ""
-    description
-            .split("; ")
-            .map { it.split(" ") }
-            .forEach {
-                if (it[1].toDouble() >= max) {
-                    max = it[1].toDouble()
-                    answer = it[0]
-                }
-            }
-    answer
-} else ""
+fun mostExpensive(description: String): String =
+        if (Regex("""(\S+\s\d+)(\.\d+)?(;\s\S+\s\d+(\.\d+)?)*""").matches(description)) {
+            var max = 0.0
+            var answer = ""
+            description
+                    .split("; ")
+                    .map { it.split(" ") }
+                    .forEach {
+                        if (it[1].toDouble() >= max) {
+                            max = it[1].toDouble()
+                            answer = it[0]
+                        }
+                    }
+            answer
+        } else ""
 
 val elements = mapOf(
         "CM" to 900,
@@ -273,7 +274,7 @@ fun fromRoman(roman: String): Int =
             Regex("""M|CM|D|CD|C|XC|L|XL|X|IX|V|IV|I""")
                     .findAll(roman)
                     .map { elements[it.value] }
-                    .sumBy { it!! }
+                    .sumBy { it ?: 0 }
 } else -1
 /**
  * Очень сложная

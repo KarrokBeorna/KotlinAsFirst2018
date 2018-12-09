@@ -119,6 +119,7 @@ class Tests {
         assertEquals("", mostExpensive(""))
         assertEquals("Курица", mostExpensive("Хлеб 39.9; Молоко 62.5; Курица 184.0; Конфеты 89.9"))
         assertEquals("Вино", mostExpensive("Вино 255.0"))
+        assertEquals("Конфеты", mostExpensive("Хлеб 255.0; Молоко 255.0; Курица 255.0; Конфеты 255.0"))
     }
 
     @Test
