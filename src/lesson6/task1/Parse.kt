@@ -270,11 +270,11 @@ val elements = mapOf(
  * Вернуть -1, если roman не является корректным римским числом
  */
 fun fromRoman(roman: String): Int =
-        if (Regex("""M*(CM|CD|DC{0,3}|C{0,3})?(XC|XL|LX{0,3}|X{0,3})?(IX|IV|VI{0,3}|I{0,3})?""").matches(roman)) {
+        if (Regex("""M*(CM|CD|DC{0,3}|C{0,3})?(XC|XL|LX{0,3}|X{0,3})?(IX|IV|VI{0,3}|I{0,3})?""").matches(roman) && roman != "") {
             Regex("""M|CM|D|CD|C|XC|L|XL|X|IX|V|IV|I""")
                     .findAll(roman)
                     .map { elements[it.value] }
-                    .sumBy { it ?: 0 }
+                    .sumBy { it!! }
 } else -1
 /**
  * Очень сложная
