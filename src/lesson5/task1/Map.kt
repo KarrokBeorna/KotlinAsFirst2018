@@ -96,12 +96,12 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *     mapOf("Emergency" to "911", "Police" to "02")
  *   ) -> mapOf("Emergency" to "112, 911", "Police" to "02")
  */
-fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
-    var book = mapA + mapB
+fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): MutableMap<String, String> {
+    val book = (mapA + mapB).toMutableMap()
     for ((key, value) in mapB) {
         if (key in mapA && value != mapA[key]) {
             val a = mapA[key]
-            book += Pair(key, "$a, $value")
+            book[key] = "$a, $value"
         }
     }
     return book
@@ -148,9 +148,10 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
         .groupBy { it.first }
         .mapValues {
             val count = it.value.size
-            it.value
-                    .map { it.second / count }
-                    .sum()
+            it.value.map {
+                val stockPrice = it.second
+                stockPrice / count
+            }.sum()
         }
 
 /**
