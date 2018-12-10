@@ -148,10 +148,7 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
         .groupBy { it.first }
         .mapValues {
             val count = it.value.size
-            it.value.map {
-                val stockPrice = it.second
-                stockPrice / count
-            }.sum()
+            it.value.map { stockPair -> stockPair.second / count }.sum()
         }
 
 /**
