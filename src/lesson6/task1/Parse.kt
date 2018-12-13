@@ -333,3 +333,12 @@ fun seriesLength(input: String): String = if (input != "") {
     } else "$a"
     answer
 } else ""
+
+fun runners(text: String): List<String> = if (Regex("""(\S+\s+\d+:\d+)(,\s\S+\s+\d+:\d+)*""").matches(text)) {
+    text
+            .replace(Regex("""\s+"""), " ")
+            .split(", ")
+            .filter { it.split(" ")[1].split(":")[1] <= "59" }
+            .sortedBy { it.split(" ")[0] }
+            .sortedBy { it.split(" ")[1] }
+} else emptyList()

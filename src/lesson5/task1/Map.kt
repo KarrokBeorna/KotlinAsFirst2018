@@ -2,6 +2,7 @@
 
 package lesson5.task1
 
+import sun.security.provider.certpath.Vertex
 import java.util.*
 
 /**
@@ -167,9 +168,9 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  *   ) -> "Мария"
  */
 fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? = stuff
-        .filter { (_, typeCost) -> typeCost.first == kind }
-        .minBy { (_, typeCost) -> typeCost.second }
-        ?.component1()
+        .filter { it.value.first == kind }
+        .minBy { it.value.second }
+        ?.key
 
 /**
  * Сложная
@@ -195,29 +196,27 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  *          "Mikhail" to setOf("Sveta", "Marat")
  *        )
  */
-fun propagateHandshakes(friends: Map<String, Set<String>>): MutableMap<String, Set<String>> {
-    val map = mutableMapOf<String, Set<String>>()
-    map += friends
-    val sheet = mutableSetOf<String>()
-    val listName = mutableListOf<String>()
-    for ((name, friend) in friends) {
-        listName.add(name)
-        sheet += friend + name
+fun handshakesSinglePerson(start: String, graph: Map<String, Set<String>>): Set<String> {
+    val allFriends = mutableMapOf(start to 0)
+    val options = mutableSetOf(start)
+    while (options.size > 0) {
+        val name = options.first()
+        graph[name]?.forEach { if (it !in allFriends) options.add(it) }
+        allFriends[name] = 0
+        options.remove(name)
     }
-    for ((name, friend) in friends) {
-        var plur = friend
-        for (i in 1..friends.size) {
-            for ((man, people) in friends) {
-                if (man in plur) {
-                    plur += people - name
-                    map += Pair(name, plur)
+    return allFriends.keys - start
+}
 
-                }
-            }
-        }
+fun propagateHandshakes(friends: Map<String, Set<String>>): MutableMap<String, Set<String>> {
+    val map = friends.toMutableMap()
+    val sheet = mutableSetOf<String>()
+    for ((name, friend) in friends) {
+        sheet += friend + name
+        map[name] = handshakesSinglePerson(name, friends)
     }
-    if ((sheet - listName).isNotEmpty())
-        for (i in (sheet - listName)) map[i] = emptySet()
+    if ((sheet - friends.keys).isNotEmpty())
+        for (i in (sheet - friends.keys)) map[i] = emptySet()
     return map
 }
 
@@ -312,18 +311,12 @@ fun hasAnagrams(words: List<String>): Boolean {
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    var a = Pair(-1, -1)
-    return if (list.isEmpty() || list.sorted().last() < number / 2 || list.sorted().first() > number / 2) a
-    else {
-        for (i in 0 until list.size) {
-            val n = number - list[i]
-            if (n in (list - list[i])) {
-                a = i to list.indexOf(n)
-                break
-            }
-        }
-        a
+    if (list.isEmpty() || list.sorted().last() < number / 2 || list.first() > number / 2) return Pair(-1, -1)
+    for (i in 0 until list.size) {
+        val n = number - list[i]
+        if (n in (list - list[i])) return i to list.indexOf(n)
     }
+    return Pair(-1, -1)
 }
 
 /**

@@ -159,5 +159,13 @@ class Tests {
         assertEquals("fpq4jb2c", seriesLength("fpqqqqjbbc"))
         assertEquals("fpq4jkprf", seriesLength("fpqqqqjkprf"))
     }
+
+    @Test
+    fun runners() {
+        assertEquals(listOf("Найк 12:48", "Пума 12:51", "Адидас 12:53"), runners("Пума 12:51, Адидас 12:53, Найк 12:48"))
+        assertEquals(emptyList<String>(), runners(""))
+        assertEquals(listOf("Найк 12:48", "Пума 12:51", "Адидас 12:53", "Китайка 12:55"), runners("Пума 12:51, Китайка 12:55, Адидас 12:53, Найк 12:48"))
+        assertEquals(listOf("Найк 12:48", "Пума 12:51", "Адидас 12:53"), runners("Пума 12:51, Китайка 12:60, Адидас 12:53, Найк 12:48"))
+    }
 }
 
