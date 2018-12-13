@@ -311,7 +311,7 @@ fun hasAnagrams(words: List<String>): Boolean {
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    if (list.isEmpty() || list.sorted().last() < number / 2 || list.first() > number / 2) return Pair(-1, -1)
+    if (list.isEmpty()) return Pair(-1, -1)
     for (i in 0 until list.size) {
         val n = number - list[i]
         if (n in (list - list[i])) return i to list.indexOf(n)
