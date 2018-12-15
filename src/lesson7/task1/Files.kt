@@ -1,4 +1,4 @@
-@file:Suppress("UNUSED_PARAMETER", "ConvertCallChainIntoSequence")
+@file:Suppress("UNUSED_PARAMETER", "ConvertCallChainInto Sequence")
 
 package lesson7.task1
 
@@ -54,8 +54,12 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  * Регистр букв игнорировать, то есть буквы е и Е считать одинаковыми.
  *
  */
-fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> = TODO()
-
+fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
+    val input = File(inputName).readText()
+    val answer = mutableMapOf<String, Int>()
+    substrings.forEach { answer[it] = it.toRegex(RegexOption.IGNORE_CASE).findAll(input).count() }
+    return answer
+}
 
 /**
  * Средняя

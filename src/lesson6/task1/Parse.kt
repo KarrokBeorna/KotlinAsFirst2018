@@ -146,7 +146,9 @@ fun bestLongJump(jumps: String): Int = if (Regex("""([\s\-%\d])+""").matches(jum
             -1
         }
     }.max()!!
-} else -1
+} else (-1)
+
+
 /**
  * Сложная
  *
@@ -341,4 +343,13 @@ fun runners(text: String): List<String> = if (Regex("""(\S+\s+\d+:\d+)(,\s\S+\s+
             .filter { it.split(" ")[1].split(":")[1] <= "59" }
             .sortedBy { it.split(" ")[0] }
             .sortedBy { it.split(" ")[1] }
+} else emptyList()
+
+fun phones(text: String, name: String): List<String> = if (Regex("""(\S+\s+\S+)(,\s+\S+\s+\S+)*""").matches(text)) {
+    text
+            .replace(Regex("""\s+"""), " ")
+            .split(", ")
+            .filter { it.split(" ")[0] == name }
+            .filter { it.split(" ")[1].matches(Regex("""([\d+\-])+""")) }
+            .map { it.split(" ")[1] }
 } else emptyList()
