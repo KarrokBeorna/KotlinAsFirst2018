@@ -311,10 +311,19 @@ fun hasAnagrams(words: List<String>): Boolean {
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    if (list.isEmpty()) return Pair(-1, -1)
-    for (i in 0 until list.size) {
-        val n = number - list[i]
-        if (n in (list - list[i])) return i to list.indexOf(n)
+    val sorted = list.sorted()
+    if (list.isEmpty() || sorted.last() < number / 2 || sorted.first() > number / 2) return Pair(-1, -1)
+    var j = list.size - 1
+    var i = 0
+    while (i < j) {
+        val s = sorted[i] + sorted[j]
+        when {
+            s > number -> j--
+            s < number -> i++
+            s == number && list.indexOf(sorted[i]) > list.indexOf(sorted[j]) ->
+                return list.indexOf(sorted[j]) to list.indexOf(sorted[i])
+            else -> return list.indexOf(sorted[i]) to list.indexOf(sorted[j])
+        }
     }
     return Pair(-1, -1)
 }
