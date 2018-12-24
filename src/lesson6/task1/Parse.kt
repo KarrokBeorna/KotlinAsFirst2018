@@ -75,11 +75,12 @@ val months = listOf("января", "февраля", "марта", "апрел�
  */
 fun dateStrToDigit(str: String): String {
     val parts = str.split(" ")
+    if (parts.size != 3) return ""
     val month: Int
     try {
         month = months.indexOf(parts[1]) + 1
-        if (month !in 1..12) throw Exception()
-    } catch (e: Exception) {
+        if (month !in 1..12) return ""
+    } catch (e: IllegalArgumentException) {
         return ""
     }
     val day = parts[0].toInt()
@@ -99,12 +100,12 @@ fun dateStrToDigit(str: String): String {
  */
 fun dateDigitToStr(digital: String): String {
     val parts = digital.split(".")
+    if (parts.size != 3) return ""
     val month: String
     try {
-        if (parts.size != 3) throw Exception()
+        if (parts[1].toInt() !in 1..12) return ""
         month = months[parts[1].toInt() - 1]
-        if (parts[1].toInt() !in 1..12) throw Exception()
-    } catch (e: Exception) {
+    } catch (e: IllegalArgumentException) {
         return ""
     }
     val day = parts[0].toInt()
@@ -142,7 +143,7 @@ fun bestLongJump(jumps: String): Int = if (Regex("""([\s\-%\d])+""").matches(jum
     max.split(" ").map {
         try {
             it.toInt()
-        } catch (e: Exception) {
+        } catch (e: IllegalArgumentException) {
             -1
         }
     }.max()!!
@@ -169,7 +170,7 @@ fun bestHighJump(jumps: String): Int = if (Regex("""([\s\-%+\d])+""").matches(ju
     max.split("+").map {
         try {
             it.toInt()
-        } catch (e: Exception) {
+        } catch (e: IllegalArgumentException) {
             -1
         }
     }.max()!!
@@ -204,14 +205,10 @@ fun plusMinus(expression: String): Int = if (Regex("""^\d+([\s]*[-|+][\s]*\d+)*"
  */
 fun firstDuplicateIndex(str: String): Int {
     val words = str.split(" ")
-    val char: Char
     var index = -1
     if (words.size > 1)
         for (i in 0 until words.size - 1) {
-            if (words[i].toLowerCase() == words[i + 1].toLowerCase()) {
-                char = words[i].first()
-                return str.indexOf(char, index)
-            }
+            if (words[i].toLowerCase() == words[i + 1].toLowerCase()) return index + 1
             index += words[i].length + 1
         }
     return -1
