@@ -127,28 +127,30 @@ fun centerFile(inputName: String, outputName: String) {
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
     val answer = File(outputName).bufferedWriter()
-    val lineLength = File(inputName)
+    val inpFile = File(inputName)
+    val lineLength = inpFile
             .readLines()
             .map { it.trim().replace(Regex("""\s+"""), " ") }
             .map { it.length }
             .max() ?: 0
-    for (line in File(inputName).readLines()) {
+    for (line in inpFile.readLines()) {
         val lineReplace = line.replace(Regex("""\s+"""), " ").trim()
-        if (lineReplace.split(" ").size <= 1) {
+        val lineRS = lineReplace.split(" ")
+        if (lineRS.size <= 1) {
             answer.write(lineReplace)
             answer.newLine()
         } else {
-            var l = ""
-            val str = lineReplace.split(" ").size - 1
+            val builder = StringBuilder()
+            val str = lineRS.size - 1
             val freeSpace = lineLength - lineReplace.length + str
             val spacesForEach = freeSpace / str
             val someSpaces = freeSpace - spacesForEach * str
             for (i in 0 until someSpaces)
-                l += lineReplace.split(" ")[i] + " ".repeat(spacesForEach + 1)
+                builder.append(lineRS[i] + " ".repeat(spacesForEach + 1))
             for (i in someSpaces until str)
-                l += lineReplace.split(" ")[i] + " ".repeat(spacesForEach)
-            l += lineReplace.split(" ").last()
-            answer.write(l)
+                builder.append(lineRS[i] + " ".repeat(spacesForEach))
+            builder.append(lineRS.last())
+            answer.write(builder.toString())
             answer.newLine()
         }
     }
