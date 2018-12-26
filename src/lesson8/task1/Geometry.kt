@@ -177,7 +177,7 @@ fun lineBySegment(s: Segment): Line = lineByPoints(s.begin, s.end)
  * Построить прямую по двум точкам
  */
 fun lineByPoints(a: Point, b: Point): Line {
-    val radians = Math.atan2(b.y - a.y, if (b.x > a.x) b.x - a.x else a.x - b.x)
+    val radians = Math.atan2(abs(b.y - a.y), abs(b.x - a.x))
     return when {
         radians == 0.0 -> Line(a, 0.0)
         radians > 0.0 && (b.x < a.x || b.y < a.y) -> Line(a, -radians % PI + PI)
