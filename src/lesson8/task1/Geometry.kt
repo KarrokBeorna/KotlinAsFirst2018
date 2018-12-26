@@ -178,11 +178,8 @@ fun lineBySegment(s: Segment): Line = lineByPoints(s.begin, s.end)
  */
 fun lineByPoints(a: Point, b: Point): Line {
     val radians = Math.atan2(abs(b.y - a.y), abs(b.x - a.x))
-    return when {
-        radians == 0.0 -> Line(a, 0.0)
-        radians > 0.0 && (b.x < a.x || b.y < a.y) -> Line(a, -radians % PI + PI)
-        else -> Line(a, radians % PI)
-    }
+    return if (radians == 0.0) Line(a, 0.0)
+    else Line(a, radians % PI)
 }
 
 /**
